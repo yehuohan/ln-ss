@@ -11,10 +11,11 @@ sys.path.append(os.getcwd() + '/../')
 
 import lnss.fourier as fourier
 import numpy as np
+import sympy as sy
 from sympy import Piecewise, integrate, fourier_series, symbols, DiracDelta
 from sympy import Sum, exp, cos, sin, pi, I, Abs, oo
 from sympy.plotting import plot
-from sympy.abc import t, w, n, k
+from sympy.abc import t, w, W, n, k
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import moviepy.editor as mpy
@@ -58,6 +59,7 @@ ax.set_xlabel(r'$|F(n)|-n\omega$')
 tau = 1
 f = Piecewise((0, t < -tau/2.0), (1, (-tau/2.0 <= t) & (t <= tau/2.0)), (0, t > tau/2.0))
 fw = fourier.ft(f)
+# fw = sy.fourier_transform(f, t, w)
 print('fw : ', [Abs(fw.subs(w, j).evalf()) for j in range(5)])
 print('Ref: ', [Abs((tau * sin(j * tau / 2) / (j * tau / 2)).evalf()) for j in range(5)])
 fig = plt.figure('Fourier transform')
@@ -70,7 +72,9 @@ ax.plot(f_range, [Abs(fw.subs(w, j).evalf()) for j in f_range])
 ax.set_xlabel(r'$|F(\omega)|-\omega$')
 """
 
+
 #%% DFS
+"""
 # 三角波序列，数字周期N=21
 N = 21
 xn = Piecewise((n/10+1, n < 0), (1-n/10, n >= 0))
@@ -79,22 +83,48 @@ print('xn : ', [xn.subs(n, j).evalf() for j in range(5)])
 print('xk : ', [Abs(xk.subs(k, j).evalf()) for j in range(5)])
 fig = plt.figure('Discrete Fourier Series')
 fig.canvas.mpl_connect('key_press_event', on_key)
-x_range = np.arange(-(3*N//2), (3*N)//2+1)
+x_range = np.arange(-(N//2), N//2+1)
 ax = fig.add_subplot(1, 2, 1)
-xn_points = [xn.subs(n, j).evalf() for j in np.arange(-(N//2), N//2+1)]*3
-ax.plot(x_range, xn_points, 'o')
-for i,j in enumerate(x_range):
+xn_range = np.append(np.append(x_range-N, x_range), x_range+N)
+xn_points = [xn.subs(n, j).evalf() for j in x_range]*3
+ax.plot(xn_range, xn_points, 'o')
+for i,j in enumerate(xn_range):
     ax.plot([j, j], [0, xn_points[i]], 'g', linewidth=2)
 ax = fig.add_subplot(1, 2, 2)
-xk_points = [Abs(xk.subs(k, j).evalf()) for j in x_range]
-ax.plot(x_range, xk_points , 'o')
-for i,j in enumerate(x_range):
+xk_points = [Abs(xk.subs(k, j).evalf()) for j in x_range]*3
+ax.plot(xn_range, xk_points , 'o')
+for i,j in enumerate(xn_range):
     ax.plot([j, j], [0, xk_points[i]], 'g', linewidth=2)
-ax.set_xlabel(r'$|X(k)|-k$')
-
+ax.set_xlabel(r'$|X(k)|-k\Omega$')
+plt.show()
+sys.exit()
+"""
 
 #%% DTFT
-# fig = plt.figure('Discrete Time Fourier Transform')
+"""
+# 三角波序列
+xn = Piecewise((0, (n < -1) | (n > 1)), (n+1, n < 0), (1-n, n >= 0))
+# xW = fourier.dtft(xn)
+xW = sy.fourier_transform(xn, n, W) # 因为dtft不能计算，使用ft来绘图
+print('xn: ', [xn.subs(n, j).evalf() for j in range(5)])
+print('xW: ', [Abs(xW.subs(W, j).evalf()) for j in range(5)])
+fig = plt.figure('Discrete Time Fourier Transform')
+fig.canvas.mpl_connect('key_press_event', on_key)
+ax = fig.add_subplot(1, 2, 1)
+xn_range = np.linspace(-2, 2, 50)
+xn_points = [xn.subs(n, j).evalf() for j in xn_range]
+ax.plot(xn_range, xn_points, 'o')
+for i,j in enumerate(xn_range):
+    ax.plot([j, j], [0, xn_points[i]], 'g', linewidth=2)
+ax = fig.add_subplot(1, 2, 2)
+xW_range = (np.linspace(-2*5, 2*5, 250))
+xW_points = [Abs(xW.subs(W, j).evalf()) for j in xn_range]*5
+ax.plot(xW_range, xW_points)
+ax.set_xlabel(r'$|X(e^{j\Omega})|-\Omega$')
+"""
+
+
+#%% DFT and FFT
 
 plt.show()
 sys.exit()

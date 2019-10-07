@@ -35,9 +35,9 @@ def fs(ft, T:float, r:tuple=()):
         print('f1 : ', Abs(fn.subs(n, 1).evalf()))
 
     :Parameters:
-        - ft: 连续周期函数，函数只能有1个自变量
-        - T: 函数周期
-        - r: 函数一个周期的范围
+        - ft: 连续周期信号，只能有1个自变量
+        - T: 信号周期
+        - r: 信号一个周期的范围
 
     :Returns: Fourier级数系数表达式，自变量符号为n
     """
@@ -65,9 +65,9 @@ def ft(ft):
         print(Abs(fw.subs(w, 0).evalf()))
 
     :Parameters:
-        - ft: 连续非周期函数，函数只能有1个自变量
+        - ft: 连续非周期信号，信号只能有1个自变量
 
-    :Returns: 频谱密度函数，自变量符号为omega(用w表示)
+    :Returns: 频谱密度函数（连续非周期信号），自变量符号为omega(用w表示)
     """
     t = tuple(ft.free_symbols)[0]
     w = sy.symbols('w')
@@ -79,14 +79,14 @@ def ift(fw):
     """傅里叶逆变换
 
     :Parameters:
-        - fw: 频谱密度函数（连续非周期函数），函数只能有1个自变量
+        - fw: 频谱密度函数（连续非周期信号），信号只能有1个自变量
 
-    :Returns: 返回原函数，函数自变量变为t
+    :Returns: 返回原信号，信号自变量变为t
     """
     w = tuple(fw.free_symbols)[0]
     t = sy.symbols('t')
     r = (w, -sy.oo, sy.oo)
-    ft = (1.0 / 2 * sy.pi) * sy.integrate(fw * sy.exp(sy.I * w * t), r)
+    ft = (1.0 / (2 * sy.pi)) * sy.integrate(fw * sy.exp(sy.I * w * t), r)
     return ft
 
 def dfs(xn, N:int, r:tuple=()):
@@ -140,14 +140,28 @@ def dtft(xn):
     :Parameters:
         - xn: 离散非周期序列，序列只能有1个自变量
 
-    :Returns: 序列频谱（周期连续信号），自变量为Omega(用W表示)
+    :Returns: 频谱密度函数（周期连续信号），自变量为Omega(用W表示)
     """
+    raise Exception("Can't sum from -oo to oo")
     n = tuple(xn.free_symbols)[0]
     W = sy.symbols('W')
+    r = (n, -sy.oo, sy.oo)
+    xW = sy.Sum(xn * sy.exp(-sy.I * W * n), r)
+    return xW
 
 def idtft(xW):
-    W = tuple(xn.free_symbols)[0]
+    """离散时间傅里叶逆变换
+
+    :Parameters:
+        - xW: 频谱密度函数（周期连续信号），信号只能有一个自变量
+
+    :Returns: 原信号序列（离散非周期序列），序列自变量为n
+    """
+    W = tuple(xW.free_symbols)[0]
     n = sy.symbols('n')
+    r = (W, 0, 2 * sy.pi)
+    xn = (1.0 / (2 * sy.pi)) * sy.integrate(xW * sy.exp(sy.I * W * n), r)
+    return xn
 
 def dft():
     pass

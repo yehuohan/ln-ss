@@ -2,7 +2,6 @@
 Fourier
 =======
 
-
 傅里叶级数(Fourier Series)
 --------------------------
 
@@ -63,7 +62,7 @@ FS用于连续周期信号。
 单位脉冲函数为：
 
 ..  math::
-    \delta (t) = 
+    \delta (t) =
     \begin{cases}
     0, t \neq 0 \\
     \infty, t = 0
@@ -92,9 +91,9 @@ FS用于连续周期信号。
 ..  image:: fourier/sample.png
     :align: center
 
-当采样频率大于信号最大频率 :math:`\omega_m` 的两倍时，可以从采样信号准确地恢复原信号。
+当采样频率大于信号最大频率 :math:`\omega_m` 的两倍时，可以从采样信号准确地恢复原信号（取一个频谱周期进行傅里叶逆变换）。
 
-对于一个离散周期信号有：
+连续信号经采样变成离散周期信号有：
 
 ..  math::
     y                 & = f(t) \\
@@ -107,14 +106,14 @@ FS用于连续周期信号。
 离散傅里叶级数(Discrete Time Fourier Series)
 --------------------------------------------
 
-离散周期信号（周期序列） :math:`x(n)` 的周期为 :math:`N` ，其谱谱也是周期离散信号，且周期为 :math:`2 \pi` 。
+离散周期信号（周期序列）的频谱也是周期离散信号，且频谱周期为 :math:`2 \pi` 。
 
 DFS公式如下：
 
 ..  math::
     W_N^{kn} &= e^{-j \frac{2 \pi}{N} k n} \\
-    X(k) &= DFS[x(n)] = \sum_{n=0}^{N-1} x(n) W_N^{nk} \\
-    x(n) &= DFS^{-1}[X(k)] = \frac{1}{N} \sum_{k=0}^{N-1} X(k) W_N^{-nk}
+    X(k \Omega) &= X(k) = DFS[x(n)] = \sum_{n=0}^{N-1} x(n) W_N^{nk} \\
+    x(n) &= DFS^{-1}[X(k \Omega)] = \frac{1}{N} \sum_{k=0}^{N-1} X(k  \Omega) W_N^{-nk}
 
 ..  image:: fourier/Discrete_Fourier_Series.png
     :align: center
@@ -129,8 +128,8 @@ DFS公式如下：
 DTFT公式如下：
 
 ..  math::
-    X(\Omega) &= DTFT[x(n)] = \sum_{n=-\infty}^{\infty} x(n) e^{-j \Omega n} \\
-    x(n) &=  DTFT^{-1}[X(\Omega)] = \frac{1}{2 \pi} \int_0^{2 \pi} X(\Omega) e^{j \Omega n} d \Omega
+    X(e^{j\Omega}) &= DTFT[x(n)] = \sum_{n=-\infty}^{\infty} x(n) e^{-j \Omega n} \\
+    x(n) &=  DTFT^{-1}[X(e^{j\Omega})] = \frac{1}{2 \pi} \int_0^{2 \pi} X(e^{j\Omega}) e^{j \Omega n} d \Omega
 
 ..  image:: fourier/Discrete_Time_Fourier_Transform.png
     :align: center
@@ -154,16 +153,17 @@ DTFT公式如下：
 | 离散-周期   | 周期-离散   | ``DFS``                                                                                    |
 |             |             |                                                                                            |
 |             |             | - :math:`W_N^{kn} = e^{-j \frac{2 \pi}{N} k n} \\[2ex]`                                    |
-|             |             | - :math:`X(k) = \sum_{n=0}^{N-1} x(n) W_N^{nk} \\[2ex]`                                    |
-|             |             | - :math:`x(n) = \frac{1}{N} \sum_{k=0}^{N-1} X(k) W_N^{-nk}`                               |
+|             |             | - :math:`X(k  \Omega) = \sum_{n=0}^{N-1} x(n) W_N^{nk} \\[2ex]`                            |
+|             |             | - :math:`x(n) = \frac{1}{N} \sum_{k=0}^{N-1} X(k \Omega) W_N^{-nk}`                        |
 +-------------+-------------+--------------------------------------------------------------------------------------------+
 | 离散-非周期 | 周期-连续   | ``DTFT``                                                                                   |
 |             |             |                                                                                            |
-|             |             | - :math:`X(\Omega) = \sum_{n=-\infty}^{\infty} x(n) e^{-j \Omega n} \\[2ex]`               |
-|             |             | - :math:`x(n) = \frac{1}{2 \pi} \int_0^{2 \pi} X(\Omega) e^{j \Omega n} d \Omega`          |
+|             |             | - :math:`X(e^{j\Omega}) = \sum_{n=-\infty}^{\infty} x(n) e^{-j \Omega n} \\[2ex]`          |
+|             |             | - :math:`x(n) = \frac{1}{2 \pi} \int_0^{2 \pi} X(e^{j\Omega}) e^{j \Omega n} d \Omega`     |
 +-------------+-------------+--------------------------------------------------------------------------------------------+
-    
-    
+
+
+----
 
 
 离散傅里叶变换(Discrete Fourier Transform)
@@ -174,15 +174,19 @@ DTFT公式如下：
 --------------------------------------
 
 
-..  根据采样定理：采样频率fs必须 >= 原信号最高频率的 二倍
-    也即：采样信号号经过DFT后，能还原的最高频率为fs / 2
-    所以：频谱图中横坐标的范围为[-fs/2, fs/2]，且频谱是对称的，一般我们只用一半就可以
-    FFT结果任意一点的频率为：假设信号采样频率为fs，从采样定理可以知道，信号抽样后，抽样信号的频谱是周期谱，其频谱的周期是抽样频率fs，因此，对信号做FFT时，无论你取多少点，其分析的频率范围就是0~fs，所以，如果你做N点的FFT（其实是离散傅里叶变换），则，FFT结果的两点之间的频率间隔是fs/N，这样，任一点k（k=0~N-1)代表的频率就是k*fs/N。另外，这N个点的FFT值是以N/2为对称的，所以，一般真正用到的只有N/2个点。N点取的大只说明谱线密一些而已，注意：采样定理非常重要啊！
+..  根据采样定理：采样频率f必须 >= 原信号最高频率的 二倍
+    也即：采样信号号经过DFT后，能还原的最高频率为f / 2
+    所以：频谱图中横坐标的范围为[-f/2, f/2]，且频谱是对称的，一般用正频段就可以
+    FFT结果任意一点的频率为：假设信号采样频率为f，从采样定理可以知道，信号抽样后，抽样信号的频谱是周期谱，其频谱的周期是抽样频率f，因此，对信号做FFT时，无论你取多少点，其分析的频率范围就是0~f，所以，如果你做N点的FFT（其实是离散傅里叶变换），则，FFT结果的两点之间的频率间隔是f/N，这样，任一点k（k=0~N-1)代表的频率就是k*f/N。另外，这N个点的FFT值是以N/2为对称的，所以，一般真正用到的只有N/2个点。N点取的大只说明谱线密一些而已，注意：采样定理非常重要啊！
+
 
 :参考:
 
 - `傅里叶级数 <https://zh.wikipedia.org/wiki/%E5%82%85%E9%87%8C%E5%8F%B6%E7%BA%A7%E6%95%B0>`_
 - `傅里叶变换 <https://zh.wikipedia.org/wiki/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2>`_
+
+
+----
 
 
 API
