@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-FS(Fourier Series)，傅里叶级数
-FT(Fourier Transform)，傅里叶变换
-"""
-
 import sys,os
 sys.path.append(os.getcwd() + '/../')
 
@@ -120,15 +115,15 @@ f = 16e3    # 采样频率16KHz
 N = 1024    # 序列长度1000
 t = np.linspace(0, N/f, N)
 x = 7*np.sin(2*np.pi*6000*t) + 3*np.sin(2*np.pi*3000*t) + 5*np.sin(2*np.pi*800*t)
-# w = fourier.dft(x, True)
-# w = fourier.dft(x, False)
+# w = fourier.dft(x)
 # xr = np.real(fourier.idft(w))
+# w = fourier.fftshift(w)
 w = fourier.fft(x)  # 补零会频谱分布有些微影响
 xr = np.real(fourier.ifft(w))
 w = fourier.fftshift(w)
-# w = np.fft.fftshift(np.fft.fft(x))
 # w = np.fft.fft(x)
 # xr = np.real(np.fft.ifft(w))
+# w = np.fft.fftshift(w)
 wabs = np.abs(w)/w.size
 print('Parseval - x: ', np.sum(np.abs(x)**2))
 print('Parseval - w: ', np.sum(np.abs(w)**2) / w.size)

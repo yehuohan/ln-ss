@@ -163,28 +163,24 @@ def idtft(xW):
     xn = (1.0 / (2 * sy.pi)) * sy.integrate(xW * sy.exp(sy.I * W * n), r)
     return xn
 
-def dft(xn:np.ndarray, shift:bool=False):
+def dft(xn:np.ndarray):
     """离散傅里叶变换
 
     默认DFT是对[0, N)之间的点进行变换，得到的频谱也是[0, N)，所以在
     不进行shift的情况下，频谱并不是关于零频率对称的（DFT是DFS时域和
-    频率的主值周期，参照DFS的演示图理解）；
+    频率的主值周期，参照DFS的演示图理解）。
+
+    这里使用矩陈乘法来计算乘积累加。
 
     :Parameters:
         - xn: 离散信号序列
-        - shift: 是否计算DFT时就直接移位
 
     :Returns: 频谱信号序列
     """
     N = xn.size
-    wn = np.exp(-1j * 2 * np.pi / N)
-    xk = np.zeros((N), dtype=np.complex)
-    if shift:
-        for k in range(N):
-            xk[((k-N//2) % N)] = np.sum(xn * np.array([np.power(wn, n*k) for n in range(N)]))
-    else:
-        for k in range(N):
-            xk[k] = np.sum(xn * np.array([np.power(wn, n*k) for n in range(N)]))
+    n = k = np.arange(N).reshape(N, 1)
+    wnk = np.exp((-1j * 2 * np.pi / N) * np.dot(n, k.T))
+    xk = np.dot(xn, wnk.T)
     return xk
 
 def idft(xk:np.ndarray):
@@ -196,10 +192,9 @@ def idft(xk:np.ndarray):
     :Returns: 离散信号序列
     """
     N = xk.size
-    wn = np.exp(-1j * 2 * np.pi / N)
-    xn = np.zeros((N), dtype=np.complex)
-    for k in range(N):
-        xn[k] = np.sum(xk * np.array([np.power(wn, -n*k) for n in range(N)])) / N
+    n = k = np.arange(N).reshape(N, 1)
+    wnk = np.exp(-(-1j * 2 * np.pi / N) * np.dot(n, k.T))
+    xn = np.dot(xk, wnk) / N
     return xn
 
 def _fft(x:np.ndarray, inv:bool):
