@@ -14,6 +14,9 @@ Welcome to ln-ss's documentation!
     :maxdepth: 2
 
     fourier
+    laplace
+    z
+    dct
 
 Indices and tables
 ==================
