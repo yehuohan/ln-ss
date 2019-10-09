@@ -163,8 +163,111 @@ def idtft(xW):
     xn = (1.0 / (2 * sy.pi)) * sy.integrate(xW * sy.exp(sy.I * W * n), r)
     return xn
 
-def dft():
-    pass
+def dft(xn:np.ndarray, shift:bool=False):
+    """离散傅里叶变换
 
-def fft():
-    pass
+    默认DFT是对[0, N)之间的点进行变换，得到的频谱也是[0, N)，所以在
+    不进行shift的情况下，频谱并不是关于零频率对称的（DFT是DFS时域和
+    频率的主值周期，参照DFS的演示图理解）；
+
+    :Parameters:
+        - xn: 离散信号序列
+        - shift: 是否计算DFT时就直接移位
+
+    :Returns: 频谱信号序列
+    """
+    N = xn.size
+    wn = np.exp(-1j * 2 * np.pi / N)
+    xk = np.zeros((N), dtype=np.complex)
+    if shift:
+        for k in range(N):
+            xk[((k-N//2) % N)] = np.sum(xn * np.array([np.power(wn, n*k) for n in range(N)]))
+    else:
+        for k in range(N):
+            xk[k] = np.sum(xn * np.array([np.power(wn, n*k) for n in range(N)]))
+    return xk
+
+def idft(xk:np.ndarray):
+    """离散傅里叶逆变换
+
+    :Parameters:
+        - xk: 频谱信号序列
+
+    :Returns: 离散信号序列
+    """
+    N = xk.size
+    wn = np.exp(-1j * 2 * np.pi / N)
+    xn = np.zeros((N), dtype=np.complex)
+    for k in range(N):
+        xn[k] = np.sum(xk * np.array([np.power(wn, -n*k) for n in range(N)])) / N
+    return xn
+
+def _fft(x:np.ndarray, inv:bool):
+    """基2时分法计算DFT和IDFT
+
+    :Parameters:
+        - x: 离散信号序列（或频谱信号序列）
+        - inv: 是否为逆变换
+
+    :Returns: 频谱信号序列（或离散信号序列）
+    """
+    N = x.size
+    wn = np.exp(-1j * 2 * np.pi / N)
+    xt = x = x.astype(dtype=np.complex)
+    if N >= 2:
+        xt = np.append(_fft(x[::2], inv),  _fft(x[1::2], inv))
+        alpha = 0.5 if inv else 1.0
+        for k in range(N//2):
+            val = xt[k]
+            wnk = np.power(wn, (-k if inv else k))
+            # 递归计算式
+            xt[k]        = alpha * (val + wnk * xt[k + N//2])
+            xt[k + N//2] = alpha * (val - wnk * xt[k + N//2])
+
+    return xt
+
+def fft(x:np.ndarray, N:int=None):
+    """快速傅里叶变换
+
+    使用基2时分法。
+
+    :Parameters:
+        - x: 离散信号序列
+        - N: 傅里叶变换区间长度，必须为2的整数幂
+
+    :Returns: 频谱信号序列
+    """
+    if N == None or N < x.size:
+        N = int(np.exp2(np.ceil(np.log2(x.size))))
+    if N == x.size:
+        xn = x
+    else:
+        xn = np.append(x, np.zeros((N-x.size), dtype=x.dtype))
+    xk = _fft(xn, False)
+    return xk
+
+def fftshift(x:np.ndarray):
+    """平移FFT频谱
+
+    FFT默认频谱不是关于零频率对称的，使用fftshift可以对调左右频谱。
+
+    :Parameters:
+        - x: 频谱序列
+
+    :Returns: 平移后的频谱
+    """
+    N = x.size
+    return np.append(x[N//2:], x[:N//2])
+
+def ifft(xk:np.ndarray):
+    """快速傅里叶逆变换
+
+    使用基2时分法。
+
+    :Parameters:
+        - xk: 频谱信号序列，序列长度必须为2的整数幂
+
+    :Returns: 离散信号序列
+    """
+    xn = _fft(xk, True)
+    return xn
