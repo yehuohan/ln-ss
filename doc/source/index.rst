@@ -14,6 +14,7 @@ Welcome to ln-ss's documentation!
     :maxdepth: 2
 
     fourier
+    fourier2d
     laplace
     z
     dct
