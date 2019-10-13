@@ -18,6 +18,7 @@ Welcome to ln-ss's documentation!
     laplace
     z
     dct
+    convolution
 
 Indices and tables
 ==================
