@@ -19,6 +19,7 @@ Welcome to ln-ss's documentation!
     z
     dct
     convolution
+    api
 
 Indices and tables
 ==================
