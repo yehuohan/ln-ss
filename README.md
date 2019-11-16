@@ -1,4 +1,4 @@
 
-# LN-SS
+# ss
 
 Signal and system.
