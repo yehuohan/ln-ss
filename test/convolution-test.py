@@ -1,6 +1,4 @@
-
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import sys,os
 sys.path.append(os.getcwd() + '/../')
@@ -11,7 +9,7 @@ import scipy as sp
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d as plt3d
-import skimage
+from skimage import io as skio
 
 mpl.rcParams['font.family'] = 'Consolas'
 mpl.rcParams['font.size'] = 11
@@ -33,7 +31,7 @@ k = np.matrix(
          [-2, 0, 2],
          [-1, 0, 1]], dtype=np.float)
 # img = np.matrix([[1, 2, 3],[4, 5, 6],[7, 8, 9]])
-img = skimage.io.imread('pic2.jpg', as_gray=True)
+img = skio.imread('pic2.jpg', as_gray=True)
 imgf = convolution.conv2d(img, k, True)
 # imgf = sp.signal.convolve2d(img, k)
 
