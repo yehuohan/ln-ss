@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import sys,os
 sys.path.append(os.getcwd() + '/../')
@@ -31,7 +30,6 @@ ax = fig.add_subplot(1, 2, 1)
 x_range = np.arange(N)
 ax.plot(x_range, x, '-')
 ax.plot(x_range, xr, 'r-')
-ax.set_xlim(0, 200)
 ax = fig.add_subplot(1, 2, 2)
 c_range = np.linspace(0, f//2, N)
 ax.plot(c_range, ck, 'g-')
