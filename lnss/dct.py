@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import numpy as np
-import sympy as sy
 
 def dct(xn:np.ndarray)->np.ndarray:
     """离散余弦变换

@@ -5,15 +5,10 @@ sys.path.append(os.getcwd() + '/../')
 
 import lnss.dct as dct
 import numpy as np
-import scipy as sp
-from scipy import fftpack
-import matplotlib as mpl
+from matplotlib.backend_bases import KeyEvent
 import matplotlib.pyplot as plt
 
-mpl.rcParams['font.family'] = 'Consolas'
-mpl.rcParams['font.size'] = 11
-
-def on_key(event:mpl.backend_bases.KeyEvent):
+def on_key(event:KeyEvent):
     if event.key == 'escape':
         plt.close()
 

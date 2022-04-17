@@ -6,30 +6,27 @@ sys.path.append(os.getcwd() + '/../')
 import lnss.convolution as convolution
 import numpy as np
 import scipy as sp
-import matplotlib as mpl
+from matplotlib.backend_bases import KeyEvent
 import matplotlib.pyplot as plt
-import mpl_toolkits.mplot3d as plt3d
 from skimage import io as skio
 
-mpl.rcParams['font.family'] = 'Consolas'
-mpl.rcParams['font.size'] = 11
-
-def on_key(event:mpl.backend_bases.KeyEvent):
+def on_key(event:KeyEvent):
     if event.key == 'escape':
         plt.close()
 
-k = np.matrix(
-        [[1, 2, 1],
-         [2, 4, 2],
-         [1, 2, 1]], dtype=np.float)
-# k = np.matrix(
+# k = np.array(
+#         [[1, 2, 1],
+#          [2, 4, 2],
+#          [1, 2, 1]], dtype=np.float64)
+# k = np.array(
 #         [[-1, -1, -1],
 #          [-1,  9, -1],
-#          [-1, -1, -1]], dtype=np.float)
-k = np.matrix(
+#          [-1, -1, -1]], dtype=np.float64)
+k = np.array(
         [[-1, 0, 1],
          [-2, 0, 2],
-         [-1, 0, 1]], dtype=np.float)
+         [-1, 0, 1]], dtype=np.float64)
+k = np.mat(k)
 # img = np.matrix([[1, 2, 3],[4, 5, 6],[7, 8, 9]])
 img = skio.imread('pic2.jpg', as_gray=True)
 imgf = convolution.conv2d(img, k, True)

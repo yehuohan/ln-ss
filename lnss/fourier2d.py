@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 二维离散傅里叶(Fourier)变换
@@ -68,7 +67,7 @@ def fft2d(fxy:np.matrix):
     """
     # raise Exception('Not implementation')
     M,N = fxy.shape
-    fuv = np.zeros((M, N), dtype=np.complex)
+    fuv = np.zeros((M, N), dtype=np.complex128)
     for k in np.arange(M):
         fuv[k, :] = fft(fxy[k, :])
     for k in np.arange(N):
@@ -80,7 +79,7 @@ def ifft2d(fuv:np.matrix):
     """
     # raise Exception('Not implementation')
     M,N = fuv.shape
-    fxy = np.zeros((M, N), dtype=np.complex)
+    fxy = np.zeros((M, N), dtype=np.complex128)
     for k in np.arange(M):
         fxy[k, :] = ifft(fuv[k, :])
     for k in np.arange(N):

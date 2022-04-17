@@ -208,7 +208,7 @@ def _fft(x:np.ndarray, inv:bool):
     """
     N = x.size
     wn = np.exp(-1j * 2 * np.pi / N)
-    xt = x = x.astype(dtype=np.complex)
+    xt = x = x.astype(dtype=np.complex128)
     if N >= 2:
         xt = np.append(_fft(x[::2], inv),  _fft(x[1::2], inv))
         alpha = 0.5 if inv else 1.0
