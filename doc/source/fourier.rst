@@ -158,14 +158,17 @@ DTFT公式如下：
 
 用计算机进行傅里叶变换运行时，需要时域和频域的信号均是离散且有限的。
 
-DFT是DFS时域和频率的主值周期；DFT是对DTFT的频域采样。
-
 设置有限序列 :math:`x(n)` 的长度为 :math:`M` ，则 :math:`N` 点（ :math:`N \ge M` ）DFT公式如下：
 
 ..  math::
     W_N &= e^{-j \frac{2 \pi}{N}} \\
     X(k) &= DFT[x(n)] = \sum_{n=0}^{N-1} x(n) W_N^{nk} \\
     x(n) &= DFT^{-1}[X(k)] = \frac{1}{N} \sum_{k=0}^{N-1} X(k) W_N^{-nk}
+
+DFT是DFS时域和频率的主值周期；DFT是对DTFT的频域采样。
+
+..  image:: fourier/DFT.png
+    :align: center
 
 
 帕塞瓦尔定理(Parseval's theorem)，即总能量为：
@@ -206,7 +209,7 @@ FFT的基本思想，是将一个长度列递归分解成两个短序列，利�
 
 如下图是FFT的频谱（已经进行了左右shift）：
 
-..  image:: fourier/DFT_and_FFT.png
+..  image:: fourier/FFT.png
     :align: center
 
 

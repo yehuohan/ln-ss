@@ -5,19 +5,14 @@ sys.path.append(os.getcwd() + '/../')
 
 import lnss.fourier as fourier
 import numpy as np
-import scipy as sp
 import sympy as sy
-from sympy import Piecewise, integrate, fourier_series, symbols, DiracDelta
-from sympy import Sum, exp, cos, sin, pi, I, Abs, oo
-from sympy.plotting import plot
-from sympy.abc import t, w, W, n, k
-import matplotlib as mpl
+from sympy import Piecewise, Abs
+from sympy.abc import W, n
+from matplotlib.backend_bases import KeyEvent
 import matplotlib.pyplot as plt
 
-mpl.rcParams['font.family'] = 'Consolas'
-mpl.rcParams['font.size'] = 11
 
-def on_key(event:mpl.backend_bases.KeyEvent):
+def on_key(event:KeyEvent):
     if event.key == 'escape':
         plt.close()
 
