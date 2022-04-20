@@ -40,7 +40,30 @@ def idft2d(fuv:np.matrix):
     fxy = np.dot(np.dot(wm, fuv), wn) / (M * N)  # wm和wn为对称矩阵，不用提心转置问题
     return fxy
 
-def fft2d_shift(img:np.matrix):
+def fft2d(fxy:np.matrix):
+    """二维离散傅里叶变换
+
+    基于一维fft计算太慢，可以考虑使用原位计算优化。
+    """
+    M,N = fxy.shape
+    fuv = np.zeros((M, N), dtype=np.complex128)
+    for k in np.arange(M):
+        fuv[k, :] = fft(fxy[k, :])
+    for k in np.arange(N):
+        fuv[:, k] = fft(fuv[:, k])
+    return fuv
+
+def ifft2d(fuv:np.matrix):
+    """二维离散傅里叶逆变换"""
+    M,N = fuv.shape
+    fxy = np.zeros((M, N), dtype=np.complex128)
+    for k in np.arange(M):
+        fxy[k, :] = ifft(fuv[k, :])
+    for k in np.arange(N):
+        fxy[:, k] = ifft(fxy[:, k])
+    return fxy
+
+def shift2d(img:np.matrix):
     """平移二维序列
 
     :Parameters:
@@ -60,28 +83,14 @@ def fft2d_shift(img:np.matrix):
     s[md:, nd:] = img[:mu, :nu]
     return s
 
-def fft2d(fxy:np.matrix):
-    """二维离散傅里叶变换
+def amp2d(fuv):
+    """计算频变幅值"""
+    return np.abs(fuv)
 
-    基于一维fft计算太慢，可以考虑使用原位计算优化。
-    """
-    # raise Exception('Not implementation')
-    M,N = fxy.shape
-    fuv = np.zeros((M, N), dtype=np.complex128)
-    for k in np.arange(M):
-        fuv[k, :] = fft(fxy[k, :])
-    for k in np.arange(N):
-        fuv[:, k] = fft(fuv[:, k])
-    return fuv
+def amp2d_log10(fuv):
+    """计算log10的频谱"""
+    return np.log10(np.abs(fuv))
 
-def ifft2d(fuv:np.matrix):
-    """二维离散傅里叶逆变换
-    """
-    # raise Exception('Not implementation')
-    M,N = fuv.shape
-    fxy = np.zeros((M, N), dtype=np.complex128)
-    for k in np.arange(M):
-        fxy[k, :] = ifft(fuv[k, :])
-    for k in np.arange(N):
-        fxy[:, k] = ifft(fxy[:, k])
-    return fxy
+def pha2d(fuv):
+    """计算频谱的相位"""
+    return np.arctan2(np.imag(fuv), np.real(fuv))
