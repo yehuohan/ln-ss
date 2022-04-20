@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 Fourier（傅里叶）变换相关计算。
@@ -19,6 +18,8 @@ Fourier（傅里叶）变换相关计算。
 
 import numpy as np
 import sympy as sy
+
+
 
 def fs(ft, T:float, r:tuple=()):
     """傅里叶级数
@@ -163,6 +164,8 @@ def idtft(xW):
     xn = (1.0 / (2 * sy.pi)) * sy.integrate(xW * sy.exp(sy.I * W * n), r)
     return xn
 
+
+
 def dft(xn:np.ndarray, half_shift:bool=False):
     """离散傅里叶变换
 
@@ -248,19 +251,6 @@ def fft(x:np.ndarray, N:int=None):
     xk = _fft(xn, False)
     return xk
 
-def fftshift(x:np.ndarray):
-    """平移FFT频谱
-
-    FFT默认频谱不是关于零频率对称的，使用fftshift可以对调左右频谱。
-
-    :Parameters:
-        - x: 频谱序列
-
-    :Returns: 平移后的频谱
-    """
-    N = x.size
-    return np.append(x[N//2:], x[:N//2])
-
 def ifft(xk:np.ndarray):
     """快速傅里叶逆变换
 
@@ -273,3 +263,16 @@ def ifft(xk:np.ndarray):
     """
     xn = _fft(xk, True)
     return xn
+
+def fftshift(x:np.ndarray):
+    """平移FFT频谱
+
+    FFT默认频谱不是关于零频率对称的，使用fftshift可以对调左右频谱。
+
+    :Parameters:
+        - x: 频谱序列
+
+    :Returns: 平移后的频谱
+    """
+    N = x.size
+    return np.append(x[N//2:], x[:N//2])
