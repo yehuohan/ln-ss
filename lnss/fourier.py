@@ -163,36 +163,43 @@ def idtft(xW):
     xn = (1.0 / (2 * sy.pi)) * sy.integrate(xW * sy.exp(sy.I * W * n), r)
     return xn
 
-def dft(xn:np.ndarray):
+def dft(xn:np.ndarray, half_shift:bool=False):
     """离散傅里叶变换
 
-    默认DFT是对[0, N)之间的点进行变换，得到的频谱也是[0, N)，所以在
-    不进行shift的情况下，频谱并不是关于零频率对称的（DFT是DFS时域和
-    频率的主值周期，参照DFS的演示图理解）。
+    DFT是DFS时域和频率的主值周期。
+    无论怎么截取主周期xn，均不会改变周期信号的频谱信息。
+    频谱坐标k默认为[0, N)，不是关于零点频率对称的；如果将k平移N/2，则可截取
+    到关于零点频率对称的主周期部分。
 
     这里使用矩陈乘法来计算乘积累加。
 
     :Parameters:
         - xn: 离散信号序列
+        - half_shift: 变换结果（即频谱）是否平移半个周期
 
     :Returns: 频谱信号序列
     """
     N = xn.size
     n = k = np.arange(N).reshape(N, 1)
+    if half_shift:
+        k -= N//2
     wnk = np.exp((-1j * 2 * np.pi / N) * np.dot(n, k.T))
     xk = np.dot(xn, wnk.T)
     return xk
 
-def idft(xk:np.ndarray):
+def idft(xk:np.ndarray, half_shift:bool=False):
     """离散傅里叶逆变换
 
     :Parameters:
         - xk: 频谱信号序列
+        - half_shift: 变换结果（即频谱）是否平移半个周期
 
     :Returns: 离散信号序列
     """
     N = xk.size
     n = k = np.arange(N).reshape(N, 1)
+    if half_shift:
+        k -= N//2
     wnk = np.exp(-(-1j * 2 * np.pi / N) * np.dot(n, k.T))
     xn = np.dot(xk, wnk) / N
     return xn
