@@ -165,11 +165,14 @@ DTFT公式如下：
     X(k) &= DFT[x(n)] = \sum_{n=0}^{N-1} x(n) W_N^{nk} \\
     x(n) &= DFT^{-1}[X(k)] = \frac{1}{N} \sum_{k=0}^{N-1} X(k) W_N^{-nk}
 
-DFT是DFS时域和频率的主值周期；DFT是对DTFT的频域采样。
-
 ..  image:: fourier/DFT.png
     :align: center
 
+- DFT是DFS时域和频率的主值周期(对比DFT和DFS的演示图理解)
+
+    无论怎么截取主周期 :math:`x(n)` ，均不会改变周期信号的频谱信息；但计算DFT时，坐标 :math:`k` 使用不同的范围，则可以截取对应的频谱区间；默认 :math:`k \in [0, N)` ，故对应的频谱不是关于零点对称的；若如上图中取 :math:`k \in [-N/2, N/2)` ，则可得到关于零点对称的频谱区间。
+
+- DFT是对DTFT的频域采样
 
 帕塞瓦尔定理(Parseval's theorem)，即总能量为：
 
