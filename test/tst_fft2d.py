@@ -4,25 +4,32 @@ import sys,os
 sys.path.append(os.getcwd() + '/../')
 
 import lnss.fourier2d as fourier2d
+import lnss.utils as utils
 import numpy as np
 import matplotlib.pyplot as plt
 
 def gen():
-    M = N = 256
+    # M = N = 256
     # img = np.matrix([[1, 2, 3],[4, 5, 6],[7, 8, 9]])
-    img = np.zeros((M, M), dtype=np.uint8)
-    img[M//2-5:M//2+5,N//2-5:N//2+5] = 255
-    # import skimage
-    # img = skimage.io.imread('pic.jpg', as_gray=True)
+    # img = np.zeros((M, M), dtype=np.uint8)
+    # img[M//2-5:M//2+5,N//2-5:N//2+5] = 255
+    import skimage
+    img = skimage.io.imread('pic.jpg', as_gray=True)
     return img
 
 def calc(img):
     imgf = fourier2d.dft2d(img)
-    imgr = np.real(fourier2d.idft2d(imgf))
+    imgr = np.real(fourier2d.idft2d(
+        fourier2d.shift2d(
+            fourier2d.shift2d(imgf) * \
+            fourier2d.butterworth(utils.gen_indices(img.shape), 5))
+        ))
+
     # imgf = fourier2d.fft2d(img)
     # imgr = np.real(fourier2d.ifft2d(imgf))
-    imgamp = fourier2d.amp2d(fourier2d.shift2d(imgf))
-    # imgamp = fourier2d.amp2d_log10(fourier2d.shift2d(imgf))
+
+    # imgamp = fourier2d.amp2d(fourier2d.shift2d(imgf))
+    imgamp = fourier2d.amp2d_log10(fourier2d.shift2d(imgf))
     return (imgr, imgamp)
 
 def calc_np(img):

@@ -9,7 +9,7 @@ from .fourier import ifft
 import numpy as np
 
 
-def dft2d(fxy:np.matrix):
+def dft2d(fxy:np.ndarray):
     """二维离散傅里叶变换
 
     :Parameters:
@@ -25,7 +25,7 @@ def dft2d(fxy:np.matrix):
     fuv = np.dot(np.dot(wm, fxy), wn)   # wm和wn为对称矩阵，不用提心转置问题
     return fuv
 
-def idft2d(fuv:np.matrix):
+def idft2d(fuv:np.ndarray):
     """二维离散傅里叶逆变换
 
     :Parameters:
@@ -41,7 +41,7 @@ def idft2d(fuv:np.matrix):
     fxy = np.dot(np.dot(wm, fuv), wn) / (M * N)  # wm和wn为对称矩阵，不用提心转置问题
     return fxy
 
-def fft2d(fxy:np.matrix):
+def fft2d(fxy:np.ndarray):
     """二维离散傅里叶变换
 
     基于一维fft计算太慢，可以考虑使用原位计算优化。
@@ -54,7 +54,7 @@ def fft2d(fxy:np.matrix):
         fuv[:, k] = fft(fuv[:, k])
     return fuv
 
-def ifft2d(fuv:np.matrix):
+def ifft2d(fuv:np.ndarray):
     """二维离散傅里叶逆变换"""
     M,N = fuv.shape
     fxy = np.zeros((M, N), dtype=np.complex128)
@@ -64,7 +64,7 @@ def ifft2d(fuv:np.matrix):
         fxy[:, k] = ifft(fxy[:, k])
     return fxy
 
-def shift2d(img:np.matrix):
+def shift2d(img:np.ndarray):
     """平移二维序列
 
     :Parameters:
@@ -95,3 +95,11 @@ def amp2d_log10(fuv):
 def pha2d(fuv):
     """计算频谱的相位"""
     return np.arctan2(np.imag(fuv), np.real(fuv))
+
+def butterworth(index: np.ndarray, d0, n=1) -> np.ndarray:
+    """巴特沃斯低通滤波
+
+    H(u, v) = 1 / (1 + (d/d0)^(2n))
+    """
+    dd0 = np.sum((index - np.array(index.shape[0:2]) / 2.0) ** 2, axis=-1) / (d0 ** 2)
+    return 1.0 / (1.0 + dd0 ** n)
