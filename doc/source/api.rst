@@ -21,7 +21,7 @@ lnss.dct
     :members:
 
 lnss.convolution
---------------
+----------------
 
 ..  automodule:: convolution
     :members:
