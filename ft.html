@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fourier &#8212; ln-ss  文档</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="prev" title="Welcome to ln-ss&#39;s documentation!" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python 模块索引"
+             >模块</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to ln-ss&#39;s documentation!"
+             accesskey="P">上一页</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ln-ss  文档</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">目录</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Fourier</a><ul>
+<li><a class="reference internal" href="#fourier-series">傅里叶级数(Fourier Series)</a></li>
+<li><a class="reference internal" href="#fourier-transform">博里叶变换(Fourier Transform)</a></li>
+<li><a class="reference internal" href="#discrete-fourier-series">离散傅里叶级数(Discrete Fourier Series)</a></li>
+<li><a class="reference internal" href="#discrete-fourier-transform">离散时间傅里叶变换(Discrete Fourier Transform)</a></li>
+<li><a class="reference internal" href="#id1">时域和域频关系</a></li>
+<li><a class="reference internal" href="#module-fourier">API</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>上一个主题</h4>
+  <p class="topless"><a href="index.html"
+                        title="上一章">Welcome to ln-ss's documentation!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>本页</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ft.rst.txt"
+            rel="nofollow">显示源代码</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="转向" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fourier">
+<h1>Fourier<a class="headerlink" href="#fourier" title="永久链接至标题">¶</a></h1>
+<div class="section" id="fourier-series">
+<h2>傅里叶级数(Fourier Series)<a class="headerlink" href="#fourier-series" title="永久链接至标题">¶</a></h2>
+<p>周期信号为：</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}y            &amp; = f(t) \\
+周期         &amp; = T \\
+解频率\omega &amp; = \frac{2 \pi}{T} \\
+频率f        &amp; = \frac{1}{T} \\\end{split}\]</div>
+<p>三角函数形式的FS为：</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}&amp;f(t) = a_0 + \sum_{n=1}^\infty [a_n cos(n \omega t) + b_n sin(n \omega t)] \\
+&amp;a_0 = \frac{1}{T} \int_0^T f(t) dt \\
+&amp;a_n = \frac{2}{T} \int_0^T f(t)cos(n \omega t) dt \\
+&amp;b_n = \frac{2}{T} \int_0^T f(t)sin(n \omega t) dt\end{split}\]</div>
+<p>指数形式的FS为：</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}&amp;f(t) = \sum_{n=-\infty}^\infty F(n \omega) e^{j n \omega t} \\
+&amp;F(n \omega) = F(n) = \frac{1}{T} \int_0^T f(t) e^{-j n \omega t} dt\end{split}\]</div>
+<p>两种形式之间有：</p>
+<div class="math notranslate nohighlight">
+\[|F(n)| = \frac{1}{2} \sqrt{a_n^2 + b_n^2}\]</div>
+<p>FS用于连续周期信号。
+连续周期信号级数的系数关于角频率的关系为频谱，频谱为离散非周期信号。</p>
+<img alt="_images/Fourier_series.png" class="align-center" src="_images/Fourier_series.png" />
+</div>
+<div class="section" id="fourier-transform">
+<h2>博里叶变换(Fourier Transform)<a class="headerlink" href="#fourier-transform" title="永久链接至标题">¶</a></h2>
+<p>当连续周期信号的周期趋于无穷大时，即变为连续非周期信号。
+对于频谱，当 <span class="math notranslate nohighlight">\(T \to \infty\)</span> 时，则谱线间的距离 <span class="math notranslate nohighlight">\(\frac{2 \pi}{T} \to 0\)</span> ，即频谱变成连续信号。</p>
+<p>对于连续非周期信号，FT为：</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}正变换 \quad &amp;F(\omega) = FT[f(t)] = \int_{-\infty}^{\infty} f(t) e^{-j \omega t} dt \\
+逆变换 \quad &amp;f(t) = FT^{-1}[F(\omega)] = \frac{1}{2 \pi} \int_{-\infty}^{\infty} F(\omega) e^{j \omega t} d \omega \\
+其中 \quad &amp;F(\omega)称为频谱密度函数\end{split}\]</div>
+</div>
+<div class="section" id="discrete-fourier-series">
+<h2>离散傅里叶级数(Discrete Fourier Series)<a class="headerlink" href="#discrete-fourier-series" title="永久链接至标题">¶</a></h2>
+</div>
+<div class="section" id="discrete-fourier-transform">
+<h2>离散时间傅里叶变换(Discrete Fourier Transform)<a class="headerlink" href="#discrete-fourier-transform" title="永久链接至标题">¶</a></h2>
+</div>
+<div class="section" id="id1">
+<h2>时域和域频关系<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 41%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>时域</p></th>
+<th class="head"><p>频域</p></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>连续-周期</p></td>
+<td><p>非周期-离散</p></td>
+<td><p>FS</p></td>
+</tr>
+<tr class="row-odd"><td><p>连续-非周期</p></td>
+<td><p>非周期-连续</p></td>
+<td><p>FT</p></td>
+</tr>
+<tr class="row-even"><td><p>离散-周期</p></td>
+<td><p>周期-离散</p></td>
+<td><p>DFS</p></td>
+</tr>
+<tr class="row-odd"><td><p>离散-非周期</p></td>
+<td><p>周期-连续</p></td>
+<td><p>DIFT</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">参考</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<ul class="simple">
+<li><p><a class="reference external" href="https://zh.wikipedia.org/wiki/%E5%82%85%E9%87%8C%E5%8F%B6%E7%BA%A7%E6%95%B0">傅里叶级数</a></p></li>
+</ul>
+</div>
+<div class="section" id="module-fourier">
+<span id="api"></span><h2>API<a class="headerlink" href="#module-fourier" title="永久链接至标题">¶</a></h2>
+<p>Fourier（傅里叶）相关算法。</p>
+<ul class="simple">
+<li><p>FS(Fourier Series)</p></li>
+<li><p>FT(Fourier Transform)</p></li>
+</ul>
+<dl class="function">
+<dt id="fourier.fs">
+<code class="sig-prename descclassname">fourier.</code><code class="sig-name descname">fs</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">T: float</em>, <em class="sig-param">r: tuple = ()</em><span class="sig-paren">)</span><a class="headerlink" href="#fourier.fs" title="永久链接至目标">¶</a></dt>
+<dd><p>计算傅里叶级数（一维信号）</p>
+<p>fs用于连续周期信号，这里基于符号运算库sympy进行计算。</p>
+<p>示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">Piecewise</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="mf">0.5</span><span class="p">)),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="p">(</span><span class="n">a0</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span> <span class="o">=</span> <span class="n">fs</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;a0 : &#39;</span><span class="p">,</span> <span class="n">a0</span><span class="o">.</span><span class="n">evalf</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;a1 : &#39;</span><span class="p">,</span> <span class="n">an</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;b1 : &#39;</span><span class="p">,</span> <span class="n">bn</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;f1 : &#39;</span><span class="p">,</span> <span class="n">Abs</span><span class="p">(</span><span class="n">fn</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">()))</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>f: 基于sympy的周期连续函数表示，函数只能有1个自变量</p></li>
+<li><p>T: 函数周期</p></li>
+<li><p>r: 函数一个周期的范围</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Fourier级数系数表达式，自变量符号为n</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="fourier.ft">
+<code class="sig-prename descclassname">fourier.</code><code class="sig-name descname">ft</code><span class="sig-paren">(</span><em class="sig-param">s: numpy.ndarray</em><span class="sig-paren">)</span><a class="headerlink" href="#fourier.ft" title="永久链接至目标">¶</a></dt>
+<dd><p>傅里叶变换</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>s: 周期信号</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>变换结果</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             >索引</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python 模块索引"
+             >模块</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to ln-ss&#39;s documentation!"
+             >上一页</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ln-ss  文档</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; 版权所有 2019, yehuohan@gmail.com.
+      由 <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2 创建。
+    </div>
+  </body>
+</html>
